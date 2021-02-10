@@ -79,6 +79,13 @@ variable "service_account_project_additional_iam_roles" {
   description = "List of custom IAM roles to add to the project."
 }
 
+variable "service_account_host_project_additional_iam_roles" {
+  type    = list(string)
+  default = []
+
+  description = "List of custom IAM roles to add to the host project."
+}
+
 variable "service_account_storage_bucket_iam_roles" {
   type = list(string)
 

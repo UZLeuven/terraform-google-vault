@@ -120,13 +120,12 @@ data "google_compute_lb_ip_ranges" "ranges" {
 # legacy proxied health port over HTTP because the health checks do not support
 # HTTPS.
 resource "google_compute_firewall" "allow-lb-healthcheck" {
-  project = var.project_id
+  project = var.host_project_id
   name    = "vault-allow-lb-healthcheck"
   network = local.network
-
   allow {
     protocol = "tcp"
-    ports    = [local.use_internal_lb ? var.vault_port : var.vault_proxy_port]
+    ports    = local.use_internal_lb ? [var.vault_port] : [var.vault_port, var.vault_proxy_port]
   }
 
   source_ranges = concat(data.google_compute_lb_ip_ranges.ranges.network, data.google_compute_lb_ip_ranges.ranges.http_ssl_tcp_internal)
@@ -138,7 +137,7 @@ resource "google_compute_firewall" "allow-lb-healthcheck" {
 
 # Allow any user-defined CIDRs to talk to the Vault instances.
 resource "google_compute_firewall" "allow-external" {
-  project = var.project_id
+  project = var.host_project_id
   name    = "vault-allow-external"
   network = local.network
 
@@ -156,7 +155,7 @@ resource "google_compute_firewall" "allow-external" {
 
 # Allow Vault nodes to talk internally on the Vault ports.
 resource "google_compute_firewall" "allow-internal" {
-  project = var.project_id
+  project = var.host_project_id
   name    = "vault-allow-internal"
   network = local.network
 
@@ -173,7 +172,7 @@ resource "google_compute_firewall" "allow-internal" {
 # Allow SSHing into machines tagged "allow-ssh"
 resource "google_compute_firewall" "allow-ssh" {
   count   = var.allow_ssh ? 1 : 0
-  project = var.project_id
+  project = var.host_project_id
   name    = "vault-allow-ssh"
   network = local.network
 

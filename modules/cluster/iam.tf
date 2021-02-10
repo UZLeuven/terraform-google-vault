@@ -34,6 +34,14 @@ resource "google_project_iam_member" "additional-project-iam" {
   member   = local.service_account_member
 }
 
+resource "google_project_iam_member" "additional-host-project-iam" {
+  for_each = toset(var.service_account_host_project_additional_iam_roles)
+  project  = var.host_project_id
+  role     = each.key
+  member   = local.service_account_member
+}
+
+
 # Give bucket-level permissions to the service account.
 resource "google_storage_bucket_iam_member" "vault" {
   for_each = toset(var.service_account_storage_bucket_iam_roles)
