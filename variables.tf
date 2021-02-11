@@ -26,6 +26,12 @@ variable "project_id" {
 
 }
 
+variable "host_project_id" {
+  type        = string
+  description = "ID of the project in which to create firewall rules"
+}
+
+
 variable "project_services" {
   type = list(string)
 
@@ -139,6 +145,14 @@ variable "service_account_project_iam_roles" {
 }
 
 variable "service_account_project_additional_iam_roles" {
+  type    = list(string)
+  default = []
+
+  description = "List of custom IAM roles to add to the project."
+
+}
+
+variable "service_account_host_project_additional_iam_roles" {
   type    = list(string)
   default = []
 
