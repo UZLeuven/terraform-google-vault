@@ -270,6 +270,7 @@ cat <<"EOF" > /etc/logrotate.d/vaultproject.io
 }
 EOF
 
+
 # Start Stackdriver monitoring
 mkdir -p /opt/stackdriver/collectd/etc/collectd.d /etc/stackdriver/collectd.d
 curl -sSfLo /etc/stackdriver/collectd.d/statsd.conf \
